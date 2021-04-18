@@ -17,14 +17,14 @@ cargo run
 
 Currently, the program will make a directory for configs not run without a config.toml file premade. (this will be fixed in the future)
 
-Put a cargo.toml in one of these locations:
-- Linux:   `/home/alice/.config/rs-youtube/cargo.toml`
-- Windows: `C:\Users\Alice\AppData\Roaming\j0lol\rs-youtube\cargo.toml`
-- macOS:   `/Users/Alice/Library/Application Support/com.j0lol.rs-youtube/cargo.toml`
+Put a config.toml in one of these locations:
+- Linux:   `/home/alice/.config/rs-youtube/config.toml`
+- Windows: `C:\Users\Alice\AppData\Roaming\j0lol\rs-youtube\config\config.toml`
+- macOS:   `/Users/Alice/Library/Application Support/com.j0lol.rs-youtube/config.toml`
 
 Write a config similar to this:
 
-`cargo.toml`
+`config.toml`
 ```toml
 subscriptions = ["UCX6OQ3DkcsbYNE6H8uQQuVA","UCiYpKsB66LZsk7s4yhxJqlQ"]
 ```
