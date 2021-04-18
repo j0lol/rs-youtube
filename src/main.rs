@@ -1,5 +1,5 @@
 use std::io::Read;
-use std::process::Command;
+use std::process::{Command, Output};
 use std::io;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -72,10 +72,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let input: usize = input.trim().parse().expect("Please type a number!");
 
-    //let command: &'static str = format!("mpv https://youtube.com/watch?v={}", arr[input]).as_str();
-    let prefix = "mpv https://youtube.com/watch?v=";
-    let command: &str = &[prefix, arr[input]].join("");
+    // Make command
+    let command = make_url("mpv https://youtube.com/watch?v=", arr[input]);
+
     // Run MPV command
+    run_command(&command);
+    Ok(())
+}
+
+fn make_url(prefix: &str, suffix: &str) -> String {
+    [prefix, suffix].join("")
+}
+fn run_command(command: &str) -> Output {
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
             .args(&["/C", command])
@@ -88,5 +96,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .output()
             .expect("failed to execute process")
     };
-    Ok(())
+    output
 }
