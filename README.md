@@ -12,7 +12,8 @@ To compile on windows or linux:
 ```
 git clone https://github.com/j0lol/rs-youtube
 cd rs-youtube
-cargo run
+cargo install --path .
+rs-youtube(.exe)
 ```
 
 Currently, the program will make a directory for configs not run without a config.toml file premade. (this will be fixed in the future)
