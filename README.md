@@ -28,3 +28,12 @@ Write a config similar to this:
 ```toml
 subscriptions = ["UCX6OQ3DkcsbYNE6H8uQQuVA","UCiYpKsB66LZsk7s4yhxJqlQ"]
 ```
+
+# Screenshots
+## "Sub box"
+![image](https://user-images.githubusercontent.com/24716467/115159857-2403e500-a08d-11eb-8393-97d16ff7c31f.png)
+
+## "Channel view"
+![image](https://user-images.githubusercontent.com/24716467/115159867-37af4b80-a08d-11eb-9c70-7fd22609a26b.png)
+
+Selecting a video will open it in MPV
