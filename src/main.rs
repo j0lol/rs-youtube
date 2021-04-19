@@ -15,6 +15,7 @@ struct Config {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
+    loop {
 
     // SUB BOX
     let project = ProjectDirs::from("com", "j0lol", "rs-youtube").unwrap();
@@ -66,6 +67,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let input: usize = input.trim().parse().expect("Please type a number!");
     print!("{esc}c", esc = 27 as char);
     show_channel(config.subscriptions[input].as_str().unwrap());
+    }
+
     Ok(())
 }
 
@@ -125,7 +128,8 @@ fn show_channel(channel_id: &str) {
     let channel_subs = channel_subs.as_str().unwrap();
 
     // Render channel banner
-    println!("{}\n{}\n",channel_name,channel_subs);
+
+    output = [output, format!("{}\n{}\n\n",channel_name,channel_subs)].join("");
     let mut arr:[&str;30] = ["null";30];
 
     for i in 0..30 {
