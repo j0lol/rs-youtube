@@ -1,10 +1,8 @@
 use std::io::Read;
-use std::process::{Command, Output, exit};
+use std::process::{Command, Output};
 use std::io;
-use std::env;
-use directories::{BaseDirs, UserDirs, ProjectDirs};
+use directories::{ProjectDirs};
 use std::fs;
-use std::path::Path;
 use toml::value::Array;
 use serde_derive::Deserialize;
 
@@ -27,12 +25,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         let input = input.trim();
 
-        match input {
-            "1" => { sub_box(); }
+        let _result = match input {
+            "1" => { sub_box() }
             "2" => { panic!("This feature has not been implemented yet.") }
             "exit" | "quit" => break,
-            string => println!("Please input a valid option. {}", string),
-        }
+            string => { println!("Please input a valid option. {}", string); Ok(()) },
+        };
     }
 
     Ok(())
