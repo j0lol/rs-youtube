@@ -19,7 +19,7 @@ Currently, the program will make a directory for configs not run without a confi
 
 Put a cargo.toml in one of these locations:
 - Linux:   `/home/alice/.config/rs-youtube/cargo.toml`
-- Windows: `C:\Users\Alice\AppData\Roaming\j0lol\rs-youtube\cargo.toml`
+- Windows: `C:\Users\Alice\AppData\Roaming\j0lol\rs-youtube\config\cargo.toml`
 - macOS:   `/Users/Alice/Library/Application Support/com.j0lol.rs-youtube/cargo.toml`
 
 Write a config similar to this:

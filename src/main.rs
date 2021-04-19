@@ -29,6 +29,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let client = reqwest::Client::new();
 
+    let mut output: String = String::from("");
+
+    println!("Loading...");
     for i in 0..config.subscriptions.len() {
         let res = request_browse(&client, config.subscriptions[i].as_str().unwrap()).unwrap();
         let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
@@ -44,12 +47,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let video_timestamp = video_timestamp.as_str().unwrap();
 
         // Print channel name
-        println!("{}) {} {}\n{}\n",i, channel_name, video_timestamp, video_name);
+        //println!("{}) {} {}\n{}\n",i, channel_name, video_timestamp, video_name);
+        output = [output, format!("{}) {} {}\n{}\n\n",i, channel_name, video_timestamp, video_name)].join("");
 
 
     }
-    println!("Type in a channel's number to open it");
+    output = [output, String::from("Type in a channel's number to open it")].join("");
 
+    print!("{esc}c", esc = 27 as char);
+    println!("{}", output);
 
     let mut input = String::new();
 
@@ -58,6 +64,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .expect("Failed to read line");
 
     let input: usize = input.trim().parse().expect("Please type a number!");
+    print!("{esc}c", esc = 27 as char);
     show_channel(config.subscriptions[input].as_str().unwrap());
     Ok(())
 }
@@ -102,6 +109,9 @@ fn show_channel(channel_id: &str) {
 
     let client = reqwest::Client::new();
 
+    let mut output: String = String::from("");
+
+    println!("Loading...");
     // let args: Vec<String> = env::args().collect();
     //
     // let channel_id = &args[1];
@@ -134,13 +144,17 @@ fn show_channel(channel_id: &str) {
 
         arr[i] = video_id;
         // Render video list
-        println!("{}) {}  {}", i, video_name, video_timestamp);
+
+        output = [output, format!("{}) {}  {}\n", i, video_name, video_timestamp)].join("");
+
 
     }
     // Print
 
-    println!("Type in a video number to open it in MPV");
+    output = [output, String::from("\nType in a video number to open it in MPV")].join("");
 
+    print!("{esc}c", esc = 27 as char);
+    println!("{}", output);
 
     let mut input = String::new();
 
