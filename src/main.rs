@@ -14,59 +14,25 @@ struct Config {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     loop {
+        println!("1) Load Subscriptions");
+        println!("2) Search");
+        println!("exit)");
 
-    // SUB BOX
-    let project = ProjectDirs::from("com", "j0lol", "rs-youtube").unwrap();
-    let mut config_dir = project.config_dir();
+        let mut input = String::new();
 
-    fs::create_dir_all(config_dir)?;
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line");
 
-    let config_path = format!("{}/config.toml",config_dir.to_str().unwrap());
-    config_dir = std::path::Path::new(&config_path);
+        let input = input.trim();
 
-    let config: Config = toml::from_str(&fs::read_to_string(config_dir)?).unwrap();
-
-    let client = reqwest::Client::new();
-
-    let mut output: String = String::from("");
-
-    println!("Loading...");
-    for i in 0..config.subscriptions.len() {
-        let res = request_browse(&client, config.subscriptions[i].as_str().unwrap()).unwrap();
-        let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
-        let channel_name = channel_name.as_str().unwrap();
-
-        // Get channel name
-        //let channel_subs: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["subscriberCountText"]["simpleText"];
-        //let channel_subs = channel_subs.as_str().unwrap();
-        let video_name: &serde_json::Value = &res["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"][0]["gridVideoRenderer"]["title"]["runs"][0]["text"];
-        let video_name = video_name.as_str().unwrap();
-        // Get timestamp
-        let video_timestamp: &serde_json::Value = &res["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"][0]["gridVideoRenderer"]["publishedTimeText"]["simpleText"];
-        let video_timestamp = video_timestamp.as_str().unwrap();
-
-        // Print channel name
-        //println!("{}) {} {}\n{}\n",i, channel_name, video_timestamp, video_name);
-        output = [output, format!("{}) {} {}\n{}\n\n",i, channel_name, video_timestamp, video_name)].join("");
-
-
-    }
-    output = [output, String::from("Type in a channel's number to open it")].join("");
-
-    print!("{esc}c", esc = 27 as char);
-    println!("{}", output);
-
-    let mut input = String::new();
-
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line");
-
-    let input: usize = input.trim().parse().expect("Please type a number!");
-    print!("{esc}c", esc = 27 as char);
-    show_channel(config.subscriptions[input].as_str().unwrap());
+        match input {
+            "1" => { sub_box(); }
+            "2" => { panic!("This feature has not been implemented yet.") }
+            "exit" | "quit" => break,
+            string => println!("Please input a valid option. {}", string),
+        }
     }
 
     Ok(())
@@ -109,7 +75,6 @@ fn run_command(command: &str) -> Output {
 }
 
 fn show_channel(channel_id: &str) {
-
     let client = reqwest::Client::new();
 
     let mut output: String = String::from("");
@@ -129,8 +94,8 @@ fn show_channel(channel_id: &str) {
 
     // Render channel banner
 
-    output = [output, format!("{}\n{}\n\n",channel_name,channel_subs)].join("");
-    let mut arr:[&str;30] = ["null";30];
+    output = [output, format!("{}\n{}\n\n", channel_name, channel_subs)].join("");
+    let mut arr: [&str; 30] = ["null"; 30];
 
     for i in 0..30 {
         // Get ID
@@ -150,8 +115,6 @@ fn show_channel(channel_id: &str) {
         // Render video list
 
         output = [output, format!("{}) {}  {}\n", i, video_name, video_timestamp)].join("");
-
-
     }
     // Print
 
@@ -166,11 +129,85 @@ fn show_channel(channel_id: &str) {
         .read_line(&mut input)
         .expect("Failed to read line");
 
-    let input: usize = input.trim().parse().expect("Please type a number!");
+    let input = input.trim();
 
-    // Make command
-    let command = make_url("mpv https://youtube.com/watch?v=", arr[input]);
+    match input {
+        "exit" => return,
+        input => {
+            let input: usize = input.parse().unwrap();
+            match input {
+                0..=29 => {
+                    let command = make_url("mpv https://youtube.com/watch?v=", arr[input]);
+                    run_command(&command);
+                }
+                _ => { println!("Not a valid number!") }
+            }
+        }
+    }
+}
 
-    // Run MPV command
-    run_command(&command);
+fn sub_box() -> Result<(), Box<dyn std::error::Error>> {
+    // SUB BOX
+    let project = ProjectDirs::from("com", "j0lol", "rs-youtube").unwrap();
+    let mut config_dir = project.config_dir();
+
+    fs::create_dir_all(config_dir)?;
+
+    let config_path = format!("{}/config.toml", config_dir.to_str().unwrap());
+    config_dir = std::path::Path::new(&config_path);
+
+    let config: Config = toml::from_str(&fs::read_to_string(config_dir)?).unwrap();
+
+    let client = reqwest::Client::new();
+
+    let mut output: String = String::from("");
+
+    println!("Loading...");
+
+    output = [output, String::from("Subscription Box: \n")].join("");
+
+    for i in 0..config.subscriptions.len() {
+        let res = request_browse(&client, config.subscriptions[i].as_str().unwrap()).unwrap();
+        let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
+        let channel_name = channel_name.as_str().unwrap();
+
+        // Get channel name
+        //let channel_subs: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["subscriberCountText"]["simpleText"];
+        //let channel_subs = channel_subs.as_str().unwrap();
+        let video_name: &serde_json::Value = &res["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"][0]["gridVideoRenderer"]["title"]["runs"][0]["text"];
+        let video_name = video_name.as_str().unwrap();
+        // Get timestamp
+        let video_timestamp: &serde_json::Value = &res["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"]["content"]["sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"][0]["gridVideoRenderer"]["publishedTimeText"]["simpleText"];
+        let video_timestamp = video_timestamp.as_str().unwrap();
+
+        // Print channel name
+        output = [output, format!("{}) {} {}\n{}\n\n", i, channel_name, video_timestamp, video_name)].join("");
+    }
+    output = [output, String::from("Type in a channel's number to open it")].join("");
+
+    print!("{esc}c", esc = 27 as char);
+    println!("{}", output);
+
+    let mut input = String::new();
+
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read line");
+
+    let input = input.trim();
+
+    match input {
+        "exit" => return Ok(()),
+        input => {
+            let input: usize = input.parse().unwrap();
+            if input < config.subscriptions.len() {
+                print!("{esc}c", esc = 27 as char);
+                show_channel(config.subscriptions[input].as_str().unwrap());
+            } else {
+                println!("Not a valid number!")
+            }
+        }
+    }
+
+    Ok(())
 }
