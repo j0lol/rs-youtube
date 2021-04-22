@@ -202,7 +202,7 @@ fn sub_box() -> Result<(), Box<dyn std::error::Error>> {
                 print!("{esc}c", esc = 27 as char);
                 show_channel(config.subscriptions[input].as_str().unwrap());
             } else {
-                println!("Not a valid number!")
+                return Err("Not a valid number")?
             }
         }
     }
