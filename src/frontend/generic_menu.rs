@@ -1,45 +1,60 @@
+use std::borrow::Borrow;
+use std::collections::HashMap;
 use std::io;
+use std::ops::Add;
 
+use crate::backend::channel_view::Summary;
+
+#[derive(Debug, Clone)]
 pub enum MenuItems {
     OrderedItem(OrderedItem),
     AdditionalItem(AdditionalItem),
 }
+#[derive(PartialEq, Eq, Hash)]
+pub enum ReturnItems {
+    String(String),
+    Int(usize),
+}
+/// OrderedItem: An item that will be labelled and chosen with a number, in order from 0 onwards.
+#[derive(Debug, Clone)]
 pub struct OrderedItem {
     pub(crate) label: String,
     pub(crate) return_string: Option<String>,
 }
+/// AdditionalItem: An item that will be labelled and chosen with a string, placed wherever.
+#[derive(Debug, Clone)]
 pub struct AdditionalItem {
-    input_label: String,
-    label: String,
+    pub(crate) input_label: String,
+    pub(crate) label: String,
+}
+#[derive(Debug, Clone)]
+pub struct ObjectItem<T>
+where
+    T: Clone,
+{
+    pub(crate) menu_item: MenuItems,
+    pub(crate) object: T,
 }
 
-fn string_vec_to_enum_vec(vec: Vec<&str>) -> Vec<MenuItems> {
-    let mut out_vec: Vec<MenuItems> = Vec::new();
-    for i in 0..vec.len() {
-        out_vec.push(MenuItems::OrderedItem(OrderedItem {
-            label: vec[i].parse().unwrap(),
-            return_string: None,
-        }))
-    }
-    out_vec.push(MenuItems::AdditionalItem(AdditionalItem {
-        input_label: String::from("exit"),
-        label: String::from("Exit menu"),
-    }));
-    out_vec
-}
+pub fn enum_menu<T: Clone>(vec: Vec<ObjectItem<T>>) -> Option<T> {
+    let mut menu_items: HashMap<String, T> = HashMap::new();
 
-pub fn enum_menu(vec: Vec<MenuItems>) -> String {
-    let mut additional_item_vec = Vec::new();
+    // "Render" menu and add items to hash map
     for i in 0..vec.len() {
-        match &vec[i] {
-            MenuItems::OrderedItem(item) => {
-                println!("{}) {}", i, item.label)
+        let object = vec[i].clone();
+        println!(
+            "{}",
+            match object.menu_item {
+                MenuItems::OrderedItem(item) => {
+                    menu_items.insert(i.to_string(), object.object);
+                    format!("{}) {}", i, item.label)
+                }
+                MenuItems::AdditionalItem(item) => {
+                    menu_items.insert(item.input_label.clone(), object.object);
+                    format!("{}) {}", item.input_label, item.label)
+                }
             }
-            MenuItems::AdditionalItem(item) => {
-                additional_item_vec.push(item.input_label.clone());
-                println!("{}) {}", item.input_label, item.label)
-            }
-        }
+        );
     }
     println!("Select an item.");
 
@@ -51,26 +66,45 @@ pub fn enum_menu(vec: Vec<MenuItems>) -> String {
 
     let input = input.trim();
 
-    if additional_item_vec.iter().any(|i| i == input) {
-        return input.to_string();
-    } else {
-        let input: usize = input.parse().unwrap();
-        if input < vec.len() {
-            match &vec[input] {
-                MenuItems::OrderedItem(item) => match item.return_string {
-                    None => return item.label.to_string(),
-                    Some(_) => return item.return_string.clone().unwrap(),
-                },
-                MenuItems::AdditionalItem(item) => &item.input_label,
-            }
-        } else {
-            let string = String::from("not a channel");
-            return string;
-        }
-    }
-    .to_string()
-    // Have input, check if item is valid via match and if
+    return match menu_items.get(input) {
+        Some(item) => Some(item.clone()),
+        None => None,
+    };
 }
+
+// Have input, check if item is valid via match and if
+
 pub fn string_menu(vec: Vec<&str>) -> String {
-    enum_menu(string_vec_to_enum_vec(vec))
+    match enum_menu(string_vec_to_enum_vec(vec)) {
+        Some(string) => string,
+        None => String::from("Invalid input."),
+    }
+}
+// pub struct ObjectItem<T> {
+//     pub(crate) menu_item: MenuItems,
+//     pub(crate) object: T,
+// }
+fn string_vec_to_enum_vec(vec: Vec<&str>) -> Vec<ObjectItem<String>> {
+    let mut out_vec: Vec<ObjectItem<String>> = Vec::new();
+
+    // Turn strings into menu items
+    for i in 0..vec.len() {
+        out_vec.push(ObjectItem {
+            menu_item: MenuItems::OrderedItem(OrderedItem {
+                label: vec[i].to_string(),
+                return_string: None,
+            }),
+            object: vec[i].to_string(),
+        })
+    }
+    // Add exit item
+    out_vec.push(ObjectItem {
+        menu_item: MenuItems::AdditionalItem(AdditionalItem {
+            input_label: String::from("exit"),
+            label: String::from("Exit menu"),
+        }),
+        object: "Exit menu".to_string(),
+    });
+
+    out_vec
 }

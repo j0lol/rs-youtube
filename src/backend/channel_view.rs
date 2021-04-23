@@ -1,4 +1,7 @@
 use crate::backend::requests::request;
+use std::time::Duration;
+use ureq::Agent;
+
 #[derive(Debug, Clone)]
 pub enum ChannelResults {
     Video(YoutubeVideo),
@@ -10,8 +13,8 @@ pub trait Summary {
 }
 #[derive(Debug, Clone)]
 pub struct YoutubePlaylist {
-    url: String,
-    title: String,
+    pub url: String,
+    pub title: String,
 }
 
 impl Summary for YoutubePlaylist {
@@ -22,9 +25,9 @@ impl Summary for YoutubePlaylist {
 
 #[derive(Debug, Clone)]
 pub struct YoutubeVideo {
-    id: String,
-    title: String,
-    timestamp: String,
+    pub id: String,
+    pub title: String,
+    pub timestamp: String,
 }
 
 impl Summary for YoutubeVideo {
@@ -34,6 +37,11 @@ impl Summary for YoutubeVideo {
 }
 
 pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
+    let agent: Agent = ureq::AgentBuilder::new()
+        .timeout_read(Duration::from_secs(5))
+        .timeout_write(Duration::from_secs(5))
+        .build();
+
     let res = request(crate::backend::requests::Request {
         url: String::from("https://www.youtube.com/youtubei/v1/browse?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"),
         body: ureq::json!({
@@ -50,7 +58,7 @@ pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
          "browseId": channel_id,
          "params": "EgZ2aWRlb3M%3D"
         }),
-    }).unwrap();
+    }, Some(&agent)).unwrap();
 
     let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
     let channel_name = channel_name.as_str().unwrap();

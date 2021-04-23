@@ -1,10 +1,9 @@
+use std::io;
+
 use serde_json::Value;
 
-use std::io;
-/*
-
 #[derive(Debug, Clone)]
-enum Results {
+pub enum Results {
     Video(YoutubeVideo),
     Channel(YoutubeChannel),
     Playlist(YoutubePlaylist),
@@ -12,16 +11,14 @@ enum Results {
     None,
 }
 
-
-
 /// Summarize content of youtube search items so they can be rendered in text.
-trait Summary {
+pub trait Summary {
     fn summarize(&self) -> String;
 }
 
 #[derive(Debug, Clone)]
-struct YoutubeVideo {
-    id: String,
+pub struct YoutubeVideo {
+    pub id: String,
     title: String,
     owner: String,
 }
@@ -33,8 +30,8 @@ impl Summary for YoutubeVideo {
 }
 
 #[derive(Debug, Clone)]
-struct YoutubeChannel {
-    id: String,
+pub struct YoutubeChannel {
+    pub id: String,
     name: String,
     subs: String,
     description: String,
@@ -48,8 +45,8 @@ impl Summary for YoutubeChannel {
 }
 
 #[derive(Debug, Clone)]
-struct YoutubePlaylist {
-    id: String,
+pub struct YoutubePlaylist {
+    pub id: String,
     title: String,
 }
 
@@ -61,9 +58,9 @@ impl Summary for YoutubePlaylist {
 
 // A shelf is a group of youtube videos
 #[derive(Debug, Clone)]
-struct YoutubeShelf {
-    title: String,
-    content: Vec<Results>,
+pub struct YoutubeShelf {
+    pub title: String,
+    pub content: Vec<Results>,
 }
 
 impl Summary for YoutubeShelf {
@@ -84,20 +81,24 @@ impl Summary for YoutubeShelf {
         format!("{}\n{}", self.title, output)
     }
 }
+use crate::backend::requests::request;
 
 // Perform a youtube search
-pub fn perform_search() -> Result<(), Box<dyn std::error::Error>> {
-    let client = reqwest::Client::new();
+pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
+    //
 
-    let mut input = String::new();
-
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line");
-
-    let input = input.trim();
-
-    let res = request_search(&client, input).unwrap();
+    let res = request(crate::backend::requests::Request {
+        url: String::from("https://www.youtube.com/youtubei/v1/search?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"),
+        body: ureq::json!({
+        "context": {
+            "client": {
+                "clientName": "WEB",
+                "clientVersion": "2.20201211.09.00"
+            }
+        },
+        "query": search_term
+    }),
+    }, None).unwrap();
 
     let mut vec = Vec::with_capacity(30);
 
@@ -254,7 +255,6 @@ pub fn perform_search() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
     }
-    results_selector(vec);
-    Ok(())
+    //results_selector(vec);
+    Some(vec)
 }
-*/

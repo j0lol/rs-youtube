@@ -2,6 +2,8 @@ use std::io;
 
 use crate::backend::config::load_config;
 use crate::backend::requests::request;
+use std::time::Duration;
+use ureq::Agent;
 
 #[derive(Debug, Clone)]
 pub struct FeedItem {
@@ -14,6 +16,10 @@ pub struct FeedItem {
 pub fn sub_box() -> Option<Vec<FeedItem>> {
     // SUB BOX
 
+    let agent: Agent = ureq::AgentBuilder::new()
+        .timeout_read(Duration::from_secs(5))
+        .timeout_write(Duration::from_secs(5))
+        .build();
     let config = load_config()?;
 
     let mut output: String = String::from("");
@@ -40,7 +46,7 @@ pub fn sub_box() -> Option<Vec<FeedItem>> {
          "browseId": config.subscriptions[i],
          "params": "EgZ2aWRlb3M%3D"
         }),
-        })?;
+        }, Some(&agent))?;
         let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
 
         let video_name: &serde_json::Value = &res["contents"]["twoColumnBrowseResultsRenderer"]
