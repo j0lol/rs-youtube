@@ -1,7 +1,7 @@
 [package]
 name = "rs-youtube"
 description = "Command line youtube client that uses the web api so no login or API key is needed."
-version = "0.1.3"
+version = "0.1.4"
 authors = ["jo! <me@j0.lol>"]
 edition = "2018"
 repository = "https://github.com/j0lol/rs-youtube"
