@@ -26,7 +26,7 @@ pub fn load_config() -> Option<Config> {
     };
     match toml::from_str(output.as_str()) {
         Ok(value) => Some(value),
-        Err(_) => toml::from_str(initial_config().as_str()).unwrap(),
+        Err(_) => initial_config(),
     }
 }
 pub fn write_config(config: Config) {
