@@ -1,19 +1,30 @@
-use crate::backend::sub_box::{sub_box};
+use crate::backend::sub_box::sub_box;
 use crate::frontend::channel_view::show_channel;
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
+use crate::frontend::utils::clear_screen;
+use console::style;
 
 pub fn show_sub_box() {
-    println!("Loading...");
+    clear_screen();
+    println!("Fetching your subscriptions...");
     let vec = sub_box().unwrap();
     let mut new_vec = Vec::new();
+
+    new_vec.push(ObjectItem {
+        menu_item: MenuItems::TitleItem("Subscriptions:\n".to_string()),
+        object: None,
+    });
+
     for i in 0..vec.len() {
         new_vec.push(ObjectItem {
             menu_item: MenuItems::OrderedItem(OrderedItem {
                 label: format!(
                     "{} {}\n{}\n",
-                    vec[i].channel_name, vec[i].video_timestamp, vec[i].video_name
+                    style(&vec[i].channel_name).bold(),
+                    style(&vec[i].video_timestamp).dim(),
+                    vec[i].video_name
                 ),
                 return_string: None,
             }),

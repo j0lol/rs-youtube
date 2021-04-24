@@ -18,11 +18,15 @@ pub fn show_search() {
 
     let vec = perform_search(input.to_string()).unwrap();
 
-    pick_results(vec);
+    pick_results(vec, format!("Search results for \"{}\":\n", input).as_str());
 }
 
-fn pick_results(vec: Vec<Results>) {
+fn pick_results(vec: Vec<Results>, search_term: &str) {
     let mut new_vec = Vec::new();
+    new_vec.push(ObjectItem {
+        menu_item: MenuItems::TitleItem(search_term.to_string()),
+        object: Results::None,
+    });
     for i in 0..vec.len() {
         // Push ObjectItem into vec
         new_vec.push(ObjectItem {
@@ -71,7 +75,7 @@ fn pick_results(vec: Vec<Results>) {
         }
         Results::Shelf(crate::backend::search::YoutubeShelf { title, content, .. }) => {
             println!("{}", title);
-            pick_results(content)
+            pick_results(content, format!("{}\n", title).as_str())
         }
         Results::None => {}
     }

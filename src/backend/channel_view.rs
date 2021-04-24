@@ -1,4 +1,6 @@
 use crate::backend::requests::request;
+use console::style;
+use serde_json::Value;
 use std::time::Duration;
 use ureq::Agent;
 
@@ -32,11 +34,11 @@ pub struct YoutubeVideo {
 
 impl Summary for YoutubeVideo {
     fn summarize(&self) -> String {
-        format!("{}  {}", self.title, self.timestamp)
+        format!("{}  {}", self.title, style(&self.timestamp).dim())
     }
 }
 
-pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
+pub fn show_channel(channel_id: &str) -> (String, String, Vec<ChannelResults>) {
     let agent: Agent = ureq::AgentBuilder::new()
         .timeout_read(Duration::from_secs(5))
         .timeout_write(Duration::from_secs(5))
@@ -60,13 +62,11 @@ pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
         }),
     }, Some(&agent)).unwrap();
 
-    let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
-    let channel_name = channel_name.as_str().unwrap();
+    let channel_name: Value = res["header"]["c4TabbedHeaderRenderer"]["title"].clone();
 
     // Get channel subs
-    //let channel_subs: &serde_json::Value =
-    //    &res["header"]["c4TabbedHeaderRenderer"]["subscriberCountText"]["simpleText"];
-    //let channel_subs = channel_subs.as_str().unwrap();
+    let channel_subs: Value =
+        res["header"]["c4TabbedHeaderRenderer"]["subscriberCountText"]["simpleText"].clone();
 
     let channel_playlist = &res["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]
         ["tabRenderer"]["content"]["sectionListRenderer"]["subMenu"]["channelSubMenuRenderer"]
@@ -102,7 +102,7 @@ pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
             title: parse_json(video_name),
             timestamp: parse_json(video_timestamp),
         };
-        //arr[i] = video_id;
+
         vec.push(ChannelResults::Video(video));
         // Render video list
     }
@@ -110,8 +110,8 @@ pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
 
     vec.push(ChannelResults::Playlist(YoutubePlaylist {
         url: parse_json(channel_playlist),
-        title: format!("Uploads from {}", channel_name),
+        title: format!("Uploads from {}", parse_json(&channel_name)),
     }));
 
-    vec
+    (parse_json(&channel_name), parse_json(&channel_subs), vec)
 }

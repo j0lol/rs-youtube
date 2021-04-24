@@ -1,10 +1,13 @@
 use std::collections::HashMap;
 use std::io;
 
+use console::style;
+
 #[derive(Debug, Clone)]
 pub enum MenuItems {
     OrderedItem(OrderedItem),
     AdditionalItem(AdditionalItem),
+    TitleItem(String),
 }
 
 /// OrderedItem: An item that will be labelled and chosen with a number, in order from 0 onwards.
@@ -33,23 +36,38 @@ pub fn enum_menu<T: Clone>(vec: Vec<ObjectItem<T>>) -> Option<T> {
     let mut menu_items: HashMap<String, T> = HashMap::new();
 
     // "Render" menu and add items to hash map
+    let mut j = 0;
     for i in 0..vec.len() {
         let object = vec[i].clone();
         println!(
             "{}",
             match object.menu_item {
                 MenuItems::OrderedItem(item) => {
-                    menu_items.insert(i.to_string(), object.object);
-                    format!("{}) {}", i, item.label)
+                    menu_items.insert(j.to_string(), object.object);
+                    let tempvalue_j = j;
+                    j = j + 1;
+                    format!(
+                        "{} {}",
+                        style(format!("{})", tempvalue_j)).dim(),
+                        item.label
+                    )
                 }
                 MenuItems::AdditionalItem(item) => {
                     menu_items.insert(item.input_label.clone(), object.object);
-                    format!("{}) {}", item.input_label, item.label)
+                    format!(
+                        "{} {}",
+                        style(format!("{})", item.input_label)).dim(),
+                        item.label
+                    )
+                }
+                MenuItems::TitleItem(string) => {
+                    string
                 }
             }
         );
     }
-    println!("Select an item.");
+
+    println!("\nSelect an item:");
 
     let mut input = String::new();
 

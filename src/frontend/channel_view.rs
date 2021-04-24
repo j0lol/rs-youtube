@@ -4,11 +4,32 @@ use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
 use crate::frontend::play_video::{play_youtube_video, PlayerList, PlayerVideo, VideoTypes};
+use console::style;
 
 pub fn show_channel(channel_id: &str) {
-    let vec = crate::backend::channel_view::show_channel(channel_id);
+    let vec = crate::backend::channel_view::show_channel(channel_id).2;
 
-    let mut new_vec = Vec::new();
+    let channel_name = crate::backend::channel_view::show_channel(channel_id).0;
+    let channel_subs = crate::backend::channel_view::show_channel(channel_id).1;
+
+    let subscribed = is_subscribed(channel_id.to_string());
+    let subscribed = match subscribed {
+        true => "Subscribed",
+        false => "Not subscribed",
+    };
+
+    let mut new_vec: Vec<ObjectItem<ChannelResults>> = Vec::new();
+
+    new_vec.push(ObjectItem {
+        menu_item: MenuItems::TitleItem(format!(
+            "{}\n{} {}\n",
+            style(channel_name).bold(),
+            channel_subs,
+            style(subscribed).dim()
+        )),
+        object: ChannelResults::None("Title".to_string()),
+    });
+
     for i in 0..vec.len() {
         // Push ObjectItem into vec
         new_vec.push(ObjectItem {

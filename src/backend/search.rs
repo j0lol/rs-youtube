@@ -1,4 +1,7 @@
+use console::style;
 use serde_json::Value;
+
+use crate::backend::requests::request;
 
 #[derive(Debug, Clone)]
 pub enum Results {
@@ -23,7 +26,11 @@ pub struct YoutubeVideo {
 
 impl Summary for YoutubeVideo {
     fn summarize(&self) -> String {
-        format!("{} by {}", self.title, self.owner)
+        format!(
+            "{} {}",
+            self.title,
+            style(format!("by {}", self.owner)).dim()
+        )
     }
 }
 
@@ -38,7 +45,7 @@ pub struct YoutubeChannel {
 
 impl Summary for YoutubeChannel {
     fn summarize(&self) -> String {
-        format!("{} ({})", self.name, self.subs)
+        format!("{} {}", self.name, style(format!("({})", self.subs)).dim())
     }
 }
 
@@ -73,13 +80,12 @@ impl Summary for YoutubeShelf {
                     panic!("Shelf contains something other than videos! Please report this.")
                 }
             };
-            output = [output, format!("\t{}) {}\n", i, text)].join("");
+            output = [output, format!("\t{}\n", text)].join("");
         }
 
-        format!("{}\n{}", self.title, output)
+        format!("{}:\n{}", self.title, output)
     }
 }
-use crate::backend::requests::request;
 
 // Perform a youtube search
 pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
