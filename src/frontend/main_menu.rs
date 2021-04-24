@@ -7,8 +7,6 @@ pub fn show_menu() {
         match crate::frontend::generic_menu::string_menu(vec![
             "Load Subscriptions",
             "Search YouTube",
-            "Subscribe to SimpleFlips",
-            "Unsubscribe from SimpleFlips",
         ])
         .as_str()
         {
