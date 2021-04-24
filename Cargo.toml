@@ -9,7 +9,7 @@ license = "MIT OR Apache-2.0"
 keywords = ["youtube", "client"]
 categories = ["command-line-utilities"]
 readme = "README.md"
-
+exclude = ["old_functions.rs"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
