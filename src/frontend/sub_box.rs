@@ -1,4 +1,4 @@
-use crate::backend::sub_box::{sub_box, FeedItem};
+use crate::backend::sub_box::{sub_box};
 use crate::frontend::channel_view::show_channel;
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,

@@ -1,6 +1,4 @@
-use crate::backend::config::{subscribe, unsubscribe};
 use crate::frontend;
-use crate::frontend::generic_menu::string_menu;
 
 pub fn show_menu() {
     loop {

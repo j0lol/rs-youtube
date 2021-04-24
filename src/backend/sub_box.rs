@@ -1,4 +1,4 @@
-use crate::backend::config::{load_config, write_config};
+use crate::backend::config::{load_config};
 use crate::backend::requests::request;
 use std::time::Duration;
 use ureq::Agent;
@@ -19,10 +19,6 @@ pub fn sub_box() -> Option<Vec<FeedItem>> {
         .timeout_write(Duration::from_secs(5))
         .build();
     let config = load_config()?;
-
-    let mut output: String = String::from("");
-
-    output = [output, String::from("Subscription Box: \n")].join("");
 
     let mut vec: Vec<FeedItem> = Vec::new();
 

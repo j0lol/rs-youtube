@@ -1,5 +1,3 @@
-use std::io::Read;
-
 use ureq::Agent;
 
 pub struct Request {

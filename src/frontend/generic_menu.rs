@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::io;
 
@@ -7,11 +6,7 @@ pub enum MenuItems {
     OrderedItem(OrderedItem),
     AdditionalItem(AdditionalItem),
 }
-#[derive(PartialEq, Eq, Hash)]
-pub enum ReturnItems {
-    String(String),
-    Int(usize),
-}
+
 /// OrderedItem: An item that will be labelled and chosen with a number, in order from 0 onwards.
 #[derive(Debug, Clone)]
 pub struct OrderedItem {

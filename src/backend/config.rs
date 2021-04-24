@@ -1,7 +1,6 @@
 use directories::ProjectDirs;
 use serde_derive::{Deserialize, Serialize};
 use std::fs;
-use std::io::Error;
 use std::path::Path;
 use toml::value::Array;
 use toml::Value;
@@ -61,7 +60,7 @@ pub fn initial_config() -> String {
 }
 
 pub fn is_subscribed(channel_id: String) -> bool {
-    let mut config = load_config().unwrap();
+    let config = load_config().unwrap();
     config
         .subscriptions
         .contains(&toml::Value::from(channel_id))

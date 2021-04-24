@@ -1,8 +1,14 @@
 [package]
 name = "rs-youtube"
+description = "Command line youtube client that uses the web api so no login or API key is needed."
 version = "0.1.1"
-authors = ["jo! <jo@pop-os.local>"]
+authors = ["jo! <me@j0.lol>"]
 edition = "2018"
+repository = "https://github.com/j0lol/rs-youtube"
+license = "MIT OR Apache-2.0"
+keywords = ["youtube", "client"]
+categories = ["command-line-utilities"]
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

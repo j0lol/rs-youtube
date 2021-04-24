@@ -63,10 +63,10 @@ pub fn show_channel(channel_id: &str) -> Vec<ChannelResults> {
     let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
     let channel_name = channel_name.as_str().unwrap();
 
-    // Get channel name
-    let channel_subs: &serde_json::Value =
-        &res["header"]["c4TabbedHeaderRenderer"]["subscriberCountText"]["simpleText"];
-    let channel_subs = channel_subs.as_str().unwrap();
+    // Get channel subs
+    //let channel_subs: &serde_json::Value =
+    //    &res["header"]["c4TabbedHeaderRenderer"]["subscriberCountText"]["simpleText"];
+    //let channel_subs = channel_subs.as_str().unwrap();
 
     let channel_playlist = &res["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]
         ["tabRenderer"]["content"]["sectionListRenderer"]["subMenu"]["channelSubMenuRenderer"]
