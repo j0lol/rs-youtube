@@ -17,6 +17,6 @@ pub fn play_youtube_video(video: VideoTypes) {
         Video(PlayerVideo { url }) => url,
         Playlist(PlayerList { url }) => url,
     };
-    println!("Playing {} :)", url);
+    println!("▶ Now playing: {} :)", url);
     run_command(&format!("mpv {}", url));
 }

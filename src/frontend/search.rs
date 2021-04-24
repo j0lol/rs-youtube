@@ -1,9 +1,8 @@
-use std::io;
-
-use crate::backend::search::{perform_search, Results, Summary, YoutubeChannel};
+use crate::backend::search::{perform_search, Results, Summary};
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
+use std::io;
 
 pub fn show_search() {
     crate::frontend::utils::clear_screen();
@@ -17,7 +16,6 @@ pub fn show_search() {
 
     let input = input.trim();
 
-    println!("{}", input);
     let vec = perform_search(input.to_string()).unwrap();
 
     pick_results(vec);

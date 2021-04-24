@@ -1,6 +1,4 @@
-use std::io;
-
-use crate::backend::config::load_config;
+use crate::backend::config::{load_config, write_config};
 use crate::backend::requests::request;
 use std::time::Duration;
 use ureq::Agent;
@@ -69,30 +67,4 @@ pub fn sub_box() -> Option<Vec<FeedItem>> {
     }
 
     return Some(vec);
-    // clear_screen();
-    //     println!("{}", output);
-    //
-    //     let mut input = String::new();
-    //
-    //     io::stdin()
-    //         .read_line(&mut input)
-    //         .expect("Failed to read line");
-    //
-    //     let input = input.trim();
-    //
-    //     match input {
-    //         "exit" => return Ok(()),
-    //
-    //         input => {
-    //             let input: usize = input.parse()?;
-    //             if input < config.subscriptions.len() {
-    //                 clear_screen();
-    //                 show_channel(config.subscriptions[input].as_str().unwrap());
-    //             } else {
-    //                 return Err("Not a valid number")?;
-    //             }
-    //         }
-    //     }
-    //
-    //     Ok(())
 }

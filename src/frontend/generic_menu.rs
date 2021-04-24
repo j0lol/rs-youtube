@@ -1,9 +1,6 @@
 use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::io;
-use std::ops::Add;
-
-use crate::backend::channel_view::Summary;
 
 #[derive(Debug, Clone)]
 pub enum MenuItems {
@@ -37,6 +34,7 @@ where
 }
 
 pub fn enum_menu<T: Clone>(vec: Vec<ObjectItem<T>>) -> Option<T> {
+    crate::frontend::utils::clear_screen();
     let mut menu_items: HashMap<String, T> = HashMap::new();
 
     // "Render" menu and add items to hash map
@@ -72,18 +70,13 @@ pub fn enum_menu<T: Clone>(vec: Vec<ObjectItem<T>>) -> Option<T> {
     };
 }
 
-// Have input, check if item is valid via match and if
-
 pub fn string_menu(vec: Vec<&str>) -> String {
     match enum_menu(string_vec_to_enum_vec(vec)) {
         Some(string) => string,
         None => String::from("Invalid input."),
     }
 }
-// pub struct ObjectItem<T> {
-//     pub(crate) menu_item: MenuItems,
-//     pub(crate) object: T,
-// }
+
 fn string_vec_to_enum_vec(vec: Vec<&str>) -> Vec<ObjectItem<String>> {
     let mut out_vec: Vec<ObjectItem<String>> = Vec::new();
 

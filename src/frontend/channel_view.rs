@@ -1,5 +1,5 @@
-use crate::backend::channel_view;
 use crate::backend::channel_view::{ChannelResults, Summary, YoutubePlaylist, YoutubeVideo};
+use crate::backend::config::{is_subscribed, subscribe, unsubscribe};
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
@@ -17,19 +17,37 @@ pub fn show_channel(channel_id: &str) {
                 label: match &vec[i] {
                     ChannelResults::Video(video) => video.summarize(),
                     ChannelResults::Playlist(playlist) => playlist.summarize(),
-                    ChannelResults::None => "None".to_string(),
+                    ChannelResults::None(_) => "None".to_string(),
                 },
                 return_string: None,
             })),
             object: (vec[i].clone()),
         });
     }
+    if is_subscribed(channel_id.to_string()) {
+        new_vec.push(ObjectItem {
+            menu_item: MenuItems::AdditionalItem(AdditionalItem {
+                input_label: String::from("unsub"),
+                label: String::from("Unsubscribe"),
+            }),
+            object: ChannelResults::None("Unsubscribe".to_string()),
+        });
+    } else {
+        new_vec.push(ObjectItem {
+            menu_item: MenuItems::AdditionalItem(AdditionalItem {
+                input_label: String::from("sub"),
+                label: String::from("Subscribe"),
+            }),
+            object: ChannelResults::None("Subscribe".to_string()),
+        });
+    }
+
     new_vec.push(ObjectItem {
         menu_item: MenuItems::AdditionalItem(AdditionalItem {
             input_label: String::from("exit"),
             label: String::from("Exit menu"),
         }),
-        object: ChannelResults::None,
+        object: ChannelResults::None("Exit menu".to_string()),
     });
 
     match enum_menu(new_vec) {
@@ -43,7 +61,12 @@ pub fn show_channel(channel_id: &str) {
                 url: format!("https://youtube.com{}", url),
             }))
         }
-        None => {}
-        Some(ChannelResults::None) => {}
+        Some(ChannelResults::None(string)) => match string.as_str() {
+            "Exit menu" => {}
+            "Subscribe" => subscribe(String::from(channel_id)),
+            "Unsubscribe" => unsubscribe(String::from(channel_id)),
+            _ => {}
+        },
+        _ => {}
     }
 }

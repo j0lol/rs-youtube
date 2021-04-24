@@ -1,5 +1,3 @@
-use std::io;
-
 use serde_json::Value;
 
 #[derive(Debug, Clone)]
@@ -133,7 +131,6 @@ pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
             ["contents"][i]
             .clone();
 
-        // TODO: Fix adwords stuff (go to [2] instead of [0]
         let channel_renderer = current_search_item["channelRenderer"].clone();
         let video_renderer = current_search_item["videoRenderer"].clone();
         let playlist_renderer = current_search_item["playlistRenderer"].clone();
@@ -255,6 +252,5 @@ pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
             }
         }
     }
-    //results_selector(vec);
     Some(vec)
 }
