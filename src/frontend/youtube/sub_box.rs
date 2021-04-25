@@ -1,9 +1,9 @@
-use crate::backend::sub_box::sub_box;
-use crate::frontend::channel_view::show_channel;
+use crate::backend::youtube::sub_box::sub_box;
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
 use crate::frontend::utils::clear_screen;
+use crate::frontend::youtube::channel_view::show_channel;
 use console::style;
 
 pub fn show_sub_box() {
@@ -42,7 +42,7 @@ pub fn show_sub_box() {
 
     match enum_menu(new_vec).unwrap() {
         None => {}
-        Some(crate::backend::sub_box::FeedItem { channel_id, .. }) => {
+        Some(crate::backend::youtube::sub_box::FeedItem { channel_id, .. }) => {
             show_channel(channel_id.as_str())
         }
     };

@@ -1,6 +1,6 @@
 use crate::backend::config::load_config;
 use crate::backend::utils::run_command;
-use crate::frontend::play_video::VideoTypes::{Playlist, Video};
+use crate::frontend::youtube::play_video::VideoTypes::{Playlist, Video};
 
 pub fn play_stream(channel_name: String) {
     let url = format!("https://twitch.tv/{}", channel_name);

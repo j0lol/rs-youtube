@@ -1,6 +1,6 @@
-use crate::backend::utils::run_command;
-use crate::frontend::play_video::VideoTypes::{Playlist, Video};
 use crate::backend::config::load_config;
+use crate::backend::utils::run_command;
+use crate::frontend::youtube::play_video::VideoTypes::{Playlist, Video};
 
 pub enum VideoTypes {
     Video(PlayerVideo),

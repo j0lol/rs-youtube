@@ -1,8 +1,9 @@
+use crate::frontend::{twitch, youtube};
 use crate::{backend, frontend};
 
 pub fn show_menu() {
     loop {
-        match crate::frontend::generic_menu::string_menu(vec![
+        match frontend::generic_menu::string_menu(vec![
             "Load YouTube Subscriptions",
             "Search YouTube",
             "Load Twitch Follows",
@@ -11,10 +12,10 @@ pub fn show_menu() {
         .as_str()
         {
             "Exit menu" => break,
-            "Load YouTube Subscriptions" => frontend::sub_box::show_sub_box(),
-            "Search YouTube" => frontend::search::show_search(),
-            "Load Twitch Follows" => frontend::twitch::follow_box::show_follow_box(),
-            "Search Twitch" => frontend::twitch::search_channels::show_search(),
+            "Load YouTube Subscriptions" => youtube::sub_box::show_sub_box(),
+            "Search YouTube" => youtube::search::show_search(),
+            "Load Twitch Follows" => twitch::follow_box::show_follow_box(),
+            "Search Twitch" => twitch::search_channels::show_search(),
             string => println!("Please input a valid option. {}", string),
         }
     }

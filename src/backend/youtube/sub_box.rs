@@ -5,10 +5,10 @@ use ureq::Agent;
 
 #[derive(Debug, Clone)]
 pub struct FeedItem {
-    pub(crate) channel_id: String,
-    pub(crate) channel_name: String,
-    pub(crate) video_name: String,
-    pub(crate) video_timestamp: String,
+    pub channel_id: String,
+    pub channel_name: String,
+    pub video_name: String,
+    pub video_timestamp: String,
 }
 
 pub fn sub_box() -> Option<Vec<FeedItem>> {

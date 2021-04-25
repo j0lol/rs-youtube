@@ -1,16 +1,20 @@
-use crate::backend::channel_view::{ChannelResults, Summary, YoutubePlaylist, YoutubeVideo};
 use crate::backend::config::{is_subscribed, subscribe, unsubscribe};
+use crate::backend::youtube::channel_view::{
+    ChannelResults, Summary, YoutubePlaylist, YoutubeVideo,
+};
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
-use crate::frontend::play_video::{play_youtube_video, PlayerList, PlayerVideo, VideoTypes};
+use crate::frontend::youtube::play_video::{
+    play_youtube_video, PlayerList, PlayerVideo, VideoTypes,
+};
 use console::style;
 
 pub fn show_channel(channel_id: &str) {
-    let vec = crate::backend::channel_view::show_channel(channel_id).2;
+    let vec = crate::backend::youtube::channel_view::show_channel(channel_id).2;
 
-    let channel_name = crate::backend::channel_view::show_channel(channel_id).0;
-    let channel_subs = crate::backend::channel_view::show_channel(channel_id).1;
+    let channel_name = crate::backend::youtube::channel_view::show_channel(channel_id).0;
+    let channel_subs = crate::backend::youtube::channel_view::show_channel(channel_id).1;
 
     let subscribed = is_subscribed(channel_id.to_string());
     let subscribed = match subscribed {

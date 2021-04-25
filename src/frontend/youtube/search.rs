@@ -1,4 +1,4 @@
-use crate::backend::search::{perform_search, Results, Summary};
+use crate::backend::youtube::search::{perform_search, Results, Summary};
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
@@ -52,28 +52,30 @@ fn pick_results(vec: Vec<Results>, search_term: &str) {
         object: Results::None,
     });
     match enum_menu(new_vec).unwrap() {
-        Results::Video(crate::backend::search::YoutubeVideo { id, .. }) => {
-            crate::frontend::play_video::play_youtube_video(
-                crate::frontend::play_video::VideoTypes::Video(
-                    crate::frontend::play_video::PlayerVideo {
+        Results::Video(crate::backend::youtube::search::YoutubeVideo { id, .. }) => {
+            crate::frontend::youtube::play_video::play_youtube_video(
+                crate::frontend::youtube::play_video::VideoTypes::Video(
+                    crate::frontend::youtube::play_video::PlayerVideo {
                         url: format!("https://youtube.com/watch?v={}", id),
                     },
                 ),
             )
         }
-        Results::Channel(crate::backend::search::YoutubeChannel { id, .. }) => {
-            crate::frontend::channel_view::show_channel(id.as_str())
+        Results::Channel(crate::backend::youtube::search::YoutubeChannel { id, .. }) => {
+            crate::frontend::youtube::channel_view::show_channel(id.as_str())
         }
-        Results::Playlist(crate::backend::search::YoutubePlaylist { id, .. }) => {
-            crate::frontend::play_video::play_youtube_video(
-                crate::frontend::play_video::VideoTypes::Playlist(
-                    crate::frontend::play_video::PlayerList {
+        Results::Playlist(crate::backend::youtube::search::YoutubePlaylist { id, .. }) => {
+            crate::frontend::youtube::play_video::play_youtube_video(
+                crate::frontend::youtube::play_video::VideoTypes::Playlist(
+                    crate::frontend::youtube::play_video::PlayerList {
                         url: format!("https://youtube.com/playlist?list={}", id),
                     },
                 ),
             )
         }
-        Results::Shelf(crate::backend::search::YoutubeShelf { title, content, .. }) => {
+        Results::Shelf(crate::backend::youtube::search::YoutubeShelf {
+            title, content, ..
+        }) => {
             println!("{}", title);
             pick_results(content, format!("{}\n", title).as_str())
         }
