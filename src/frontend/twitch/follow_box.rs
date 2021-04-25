@@ -5,7 +5,6 @@ use crate::backend::twitch::search_channels::Channel;
 use crate::frontend::generic_menu::{
     enum_menu, AdditionalItem, MenuItems, ObjectItem, OrderedItem,
 };
-use crate::frontend::twitch::play_stream::play_stream;
 use crate::frontend::twitch::search_channels::play_or_follow;
 use crate::frontend::utils::clear_screen;
 
