@@ -1,5 +1,5 @@
 use crate::frontend::{twitch, youtube};
-use crate::{backend, frontend};
+use crate::{frontend};
 
 pub fn show_menu() {
     loop {
