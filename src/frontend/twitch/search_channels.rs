@@ -25,20 +25,19 @@ pub fn show_search() {
 }
 
 fn pick_results(vec: Vec<Channel>, search_term: &str) {
-    let mut new_vec = Vec::new();
-    new_vec.push(ObjectItem {
+    let mut new_vec = vec![ObjectItem {
         menu_item: MenuItems::TitleItem(search_term.to_string()),
         object: None,
-    });
-    for i in 0..vec.len() {
+    }];
+    for i in vec {
         // Push ObjectItem into vec
         new_vec.push(ObjectItem {
             // Give menu renderer information to render the video with:
             menu_item: (MenuItems::OrderedItem(OrderedItem {
-                label: format!("{}", &vec[i].display_name),
+                label: i.display_name.clone(),
                 return_string: None,
             })),
-            object: Some(vec[i].clone()),
+            object: Some(i.clone()),
         });
     }
     new_vec.push(ObjectItem {
@@ -48,9 +47,8 @@ fn pick_results(vec: Vec<Channel>, search_term: &str) {
         }),
         object: None,
     });
-    match enum_menu(new_vec).unwrap() {
-        Some(channel) => play_or_follow(channel, None),
-        None => {}
+    if let Some(channel) = enum_menu(new_vec).unwrap() {
+        play_or_follow(channel, None)
     }
 }
 
@@ -74,9 +72,9 @@ pub fn play_or_follow(channel: Channel, go_to_channel: Option<Channel>) {
         }
     } else if x == "Un/follow" {
         if is_following((&channel.name).to_string()) {
-            unfollow(channel.name.clone());
+            unfollow(channel.name);
         } else {
-            follow(channel.name.clone());
+            follow(channel.name);
         }
     } else {
         println!("Please input a valid option. {}", x);

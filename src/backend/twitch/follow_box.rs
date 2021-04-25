@@ -116,5 +116,5 @@ pub fn follow_box() -> Option<Vec<FeedItem>> {
         }
     }
 
-    return Some(vec);
+    Some(vec)
 }

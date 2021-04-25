@@ -10,25 +10,23 @@ pub fn show_sub_box() {
     clear_screen();
     println!("Fetching your subscriptions...");
     let vec = sub_box().unwrap();
-    let mut new_vec = Vec::new();
-
-    new_vec.push(ObjectItem {
+    let mut new_vec = vec![ObjectItem {
         menu_item: MenuItems::TitleItem("Subscriptions:\n".to_string()),
         object: None,
-    });
+    }];
 
-    for i in 0..vec.len() {
+    for i in vec {
         new_vec.push(ObjectItem {
             menu_item: MenuItems::OrderedItem(OrderedItem {
                 label: format!(
                     "{} {}\n{}\n",
-                    style(&vec[i].channel_name).bold(),
-                    style(&vec[i].video_timestamp).dim(),
-                    vec[i].video_name
+                    style(&i.channel_name).bold(),
+                    style(&i.video_timestamp).dim(),
+                    i.video_name
                 ),
                 return_string: None,
             }),
-            object: Some(vec[i].clone()),
+            object: Some(i.clone()),
         });
     }
 

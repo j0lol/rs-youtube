@@ -37,15 +37,15 @@ pub fn enum_menu<T: Clone>(vec: Vec<ObjectItem<T>>) -> Option<T> {
 
     // "Render" menu and add items to hash map
     let mut j = 0;
-    for i in 0..vec.len() {
-        let object = vec[i].clone();
+    for i in vec {
+        let object = i.clone();
         println!(
             "{}",
             match object.menu_item {
                 MenuItems::OrderedItem(item) => {
                     menu_items.insert(j.to_string(), object.object);
                     let tempvalue_j = j;
-                    j = j + 1;
+                    j += 1;
                     format!(
                         "{} {}",
                         style(format!("{})", tempvalue_j)).dim(),
@@ -94,13 +94,13 @@ fn string_vec_to_enum_vec(vec: Vec<&str>) -> Vec<ObjectItem<String>> {
     let mut out_vec: Vec<ObjectItem<String>> = Vec::new();
 
     // Turn strings into menu items
-    for i in 0..vec.len() {
+    for i in vec {
         out_vec.push(ObjectItem {
             menu_item: MenuItems::OrderedItem(OrderedItem {
-                label: vec[i].to_string(),
+                label: i.to_string(),
                 return_string: None,
             }),
-            object: vec[i].to_string(),
+            object: i.to_string(),
         })
     }
     // Add exit item

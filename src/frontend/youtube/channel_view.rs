@@ -22,9 +22,7 @@ pub fn show_channel(channel_id: &str) {
         false => "Not subscribed",
     };
 
-    let mut new_vec: Vec<ObjectItem<ChannelResults>> = Vec::new();
-
-    new_vec.push(ObjectItem {
+    let mut new_vec: Vec<ObjectItem<ChannelResults>> = vec![ObjectItem {
         menu_item: MenuItems::TitleItem(format!(
             "{}\n{} {}\n",
             style(channel_name).bold(),
@@ -32,21 +30,21 @@ pub fn show_channel(channel_id: &str) {
             style(subscribed).dim()
         )),
         object: ChannelResults::None("Title".to_string()),
-    });
+    }];
 
-    for i in 0..vec.len() {
+    for i in vec {
         // Push ObjectItem into vec
         new_vec.push(ObjectItem {
             // Give menu renderer information to render the video with:
             menu_item: (MenuItems::OrderedItem(OrderedItem {
-                label: match &vec[i] {
+                label: match &i {
                     ChannelResults::Video(video) => video.summarize(),
                     ChannelResults::Playlist(playlist) => playlist.summarize(),
                     ChannelResults::None(_) => "None".to_string(),
                 },
                 return_string: None,
             })),
-            object: (vec[i].clone()),
+            object: (i.clone()),
         });
     }
     if is_subscribed(channel_id.to_string()) {

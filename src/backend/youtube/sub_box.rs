@@ -59,9 +59,12 @@ pub fn sub_box() -> Option<Vec<FeedItem>> {
             channel_id: config.subscriptions[i].as_str().unwrap().to_string(),
             channel_name: channel_name.as_str().unwrap().to_string(),
             video_name: video_name.as_str().unwrap().to_string(),
-            video_timestamp: video_timestamp.as_str().unwrap().to_string(),
+            video_timestamp: video_timestamp
+                .as_str()
+                .unwrap_or("(No Timestamp, probably streaming...)")
+                .to_string(),
         })
     }
 
-    return Some(vec);
+    Some(vec)
 }

@@ -22,17 +22,16 @@ pub fn show_search() {
 }
 
 fn pick_results(vec: Vec<Results>, search_term: &str) {
-    let mut new_vec = Vec::new();
-    new_vec.push(ObjectItem {
+    let mut new_vec = vec![ObjectItem {
         menu_item: MenuItems::TitleItem(search_term.to_string()),
         object: Results::None,
-    });
-    for i in 0..vec.len() {
+    }];
+    for i in vec {
         // Push ObjectItem into vec
         new_vec.push(ObjectItem {
             // Give menu renderer information to render the video with:
             menu_item: (MenuItems::OrderedItem(OrderedItem {
-                label: match &vec[i] {
+                label: match &i {
                     Results::Video(video) => video.summarize(),
                     Results::Channel(channel) => channel.summarize(),
                     Results::Playlist(playlist) => playlist.summarize(),
@@ -41,7 +40,7 @@ fn pick_results(vec: Vec<Results>, search_term: &str) {
                 },
                 return_string: None,
             })),
-            object: (vec[i].clone()),
+            object: (i.clone()),
         });
     }
     new_vec.push(ObjectItem {

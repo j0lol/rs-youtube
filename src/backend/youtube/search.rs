@@ -123,7 +123,7 @@ pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
                 break;
             }
             _ => {
-                j = j + 1;
+                j += 1;
             }
         }
         if j > 10 {
@@ -212,7 +212,7 @@ pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
 
                     vec.push(Results::Video(video));
                 }
-                i = i + 1;
+                i += 1;
             }
 
             let shelf = YoutubeShelf {

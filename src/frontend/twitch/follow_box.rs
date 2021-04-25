@@ -12,40 +12,38 @@ pub fn show_follow_box() {
     clear_screen();
     println!("Fetching your follows...");
     let vec = follow_box().unwrap();
-    let mut new_vec = Vec::new();
-
-    new_vec.push(ObjectItem {
+    let mut new_vec = vec![ObjectItem {
         menu_item: MenuItems::TitleItem("Follows:\n".to_string()),
         object: None,
-    });
+    }];
 
-    for i in 0..vec.len() {
+    for i in vec {
         new_vec.push(ObjectItem {
             menu_item: MenuItems::OrderedItem(OrderedItem {
-                label: match &vec[i].channel_status {
+                label: match &i.channel_status {
                     ChannelStatus::Live => {
                         format!(
                             "{} is playing {}\n{}\n",
-                            style(&vec[i].channel_display_name).green(),
-                            &vec[i].livestream_game.as_ref().unwrap(),
-                            style(&vec[i].livestream_title.as_ref().unwrap()).bold(),
+                            style(&i.channel_display_name).green(),
+                            &i.livestream_game.as_ref().unwrap(),
+                            style(&i.livestream_title.as_ref().unwrap()).bold(),
                         )
                     }
                     ChannelStatus::Hosting => {
                         format!(
                             "{} is hosting {}\n{}\n",
-                            style(&vec[i].channel_display_name).yellow(),
-                            &vec[i].hosting_channel_display_name.as_ref().unwrap(),
-                            style(&vec[i].hosting_livestream_title.as_ref().unwrap()).bold(),
+                            style(&i.channel_display_name).yellow(),
+                            &i.hosting_channel_display_name.as_ref().unwrap(),
+                            style(&i.hosting_livestream_title.as_ref().unwrap()).bold(),
                         )
                     }
                     ChannelStatus::Offline => {
-                        format!("{} is offline\n", style(&vec[i].channel_display_name).red())
+                        format!("{} is offline\n", style(&i.channel_display_name).red())
                     }
                 },
                 return_string: None,
             }),
-            object: Some(vec[i].clone()),
+            object: Some(i.clone()),
         });
     }
 

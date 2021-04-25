@@ -21,7 +21,7 @@ pub struct YoutubePlaylist {
 
 impl Summary for YoutubePlaylist {
     fn summarize(&self) -> String {
-        format!("{}", self.title)
+        self.title.to_string()
     }
 }
 
@@ -101,7 +101,10 @@ pub fn show_channel(channel_id: &str) -> (String, String, Vec<ChannelResults>) {
         let video = YoutubeVideo {
             id: parse_json(video_id),
             title: parse_json(video_name),
-            timestamp: parse_json(video_timestamp),
+            timestamp: video_timestamp
+                .as_str()
+                .unwrap_or("(No Timestamp, probably streaming...)")
+                .to_string(),
         };
 
         vec.push(ChannelResults::Video(video));
