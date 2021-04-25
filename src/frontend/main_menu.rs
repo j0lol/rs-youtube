@@ -1,4 +1,4 @@
-use crate::{backend, frontend};
+use crate::{frontend};
 
 pub fn show_menu() {
     loop {

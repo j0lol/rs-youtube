@@ -1,7 +1,7 @@
 use std::io;
 
 use crate::backend::config::{
-    follow, is_following, is_subscribed, subscribe, unfollow, unsubscribe,
+    follow, is_following, unfollow,
 };
 use crate::backend::twitch::search_channels::{perform_search, Channel};
 use crate::frontend::generic_menu::{

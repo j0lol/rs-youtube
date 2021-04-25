@@ -1,5 +1,3 @@
-use console::style;
-use serde_json::Value;
 
 use crate::backend::requests::request;
 use std::time::Duration;

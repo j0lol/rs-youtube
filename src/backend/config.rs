@@ -2,7 +2,6 @@ use directories::ProjectDirs;
 use serde_derive::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
-use toml::de::Error;
 use toml::value::Array;
 use toml::Value;
 
