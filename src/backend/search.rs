@@ -102,6 +102,7 @@ pub fn perform_search(search_term: String) -> Option<Vec<Results>> {
         },
         "query": search_term
     }),
+        header: None,
     }, None).unwrap();
 
     let mut vec = Vec::with_capacity(30);

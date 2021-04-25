@@ -1,8 +1,8 @@
 # rs-youtube
 
-Command line YouTube client that uses the web api so no login or API key is needed.
+Command line YouTube/Twitch client that uses the web api so no login or API key is needed.
 
-- Requires `mpv` and `youtube-dl`, or another video player capable of loading videos from YouTube links (e.g. `celluloid`, even a web browser would work) 
+- Requires `mpv` and `youtube-dl`, or another video player capable of loading videos from YouTube/Twitch links (e.g. `celluloid`, even a web browser would work) 
 
 ## Installation
 
@@ -38,6 +38,7 @@ If you would like to edit the config, the format looks like this:
 `config.toml`
 ```toml
 subscriptions = ["UCX6OQ3DkcsbYNE6H8uQQuVA","UCiYpKsB66LZsk7s4yhxJqlQ"]
+follows = ["simpleflips"]
 video_player = "mpv"
 ```
 The config file defaults to loading mpv, and will have 0 subscriptions. You can subscribe to a channel by searching for its channel page, then picking the "sub" option.

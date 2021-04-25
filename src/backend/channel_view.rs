@@ -60,6 +60,7 @@ pub fn show_channel(channel_id: &str) -> (String, String, Vec<ChannelResults>) {
          "browseId": channel_id,
          "params": "EgZ2aWRlb3M%3D"
         }),
+        header: None,
     }, Some(&agent)).unwrap();
 
     let channel_name: Value = res["header"]["c4TabbedHeaderRenderer"]["title"].clone();

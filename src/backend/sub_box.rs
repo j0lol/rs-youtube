@@ -1,4 +1,4 @@
-use crate::backend::config::{load_config};
+use crate::backend::config::load_config;
 use crate::backend::requests::request;
 use std::time::Duration;
 use ureq::Agent;
@@ -40,6 +40,7 @@ pub fn sub_box() -> Option<Vec<FeedItem>> {
          "browseId": config.subscriptions[i],
          "params": "EgZ2aWRlb3M%3D"
         }),
+            header: None,
         }, Some(&agent))?;
         let channel_name: &serde_json::Value = &res["header"]["c4TabbedHeaderRenderer"]["title"];
 

@@ -2,6 +2,7 @@ use directories::ProjectDirs;
 use serde_derive::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
+use toml::de::Error;
 use toml::value::Array;
 use toml::Value;
 
@@ -9,6 +10,7 @@ use toml::Value;
 pub struct Config {
     pub(crate) subscriptions: Array,
     pub(crate) video_player: Value,
+    pub(crate) follows: Array,
 }
 
 pub fn load_config() -> Option<Config> {
@@ -26,9 +28,10 @@ pub fn load_config() -> Option<Config> {
     };
     match toml::from_str(output.as_str()) {
         Ok(value) => Some(value),
-        Err(_) => {
-            initial_config();
-            None
+        Err(err) => {
+            println!("\n\n\nYour config file, at {}, is not valid.\nIf this happened after a program update, a new field may have been added.\nPlease see the default config at: https://github.com/j0lol/rs-youtube/blob/main/config.toml.default and make changes accordingly.\nSorry for breaking your config!\n\n\n", config_path.to_str().unwrap());
+            println!("Heres your error!");
+            panic!("Could not parse config file! Error: {}", err);
         }
     }
 }
@@ -55,6 +58,7 @@ pub fn initial_config() -> String {
     let string = toml::to_string(&Config {
         subscriptions: Array::new(),
         video_player: toml::Value::String("mpv".to_string()),
+        follows: Array::new(),
     })
     .unwrap();
     fs::write(config_path, string.as_bytes()).unwrap();
@@ -77,5 +81,21 @@ pub fn unsubscribe(channel_id: String) {
     let mut config = load_config().unwrap();
     let remove_value = toml::Value::from(channel_id);
     config.subscriptions.retain(|x| *x != remove_value);
+    write_config(config);
+}
+
+pub fn is_following(channel_id: String) -> bool {
+    let config = load_config().unwrap();
+    config.follows.contains(&toml::Value::from(channel_id))
+}
+pub fn follow(channel_id: String) {
+    let mut config = load_config().unwrap();
+    config.follows.push(toml::Value::from(channel_id));
+    write_config(config);
+}
+pub fn unfollow(channel_id: String) {
+    let mut config = load_config().unwrap();
+    let remove_value = toml::Value::from(channel_id);
+    config.follows.retain(|x| *x != remove_value);
     write_config(config);
 }

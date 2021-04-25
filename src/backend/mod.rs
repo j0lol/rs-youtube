@@ -4,4 +4,5 @@ pub mod play_video;
 pub mod requests;
 pub mod search;
 pub mod sub_box;
+pub mod twitch;
 pub mod utils;
