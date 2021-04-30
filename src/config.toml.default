@@ -1,3 +1,8 @@
-subscriptions = []
-follows = []
+[options]
 video_player = "mpv"
+
+[youtube]
+subscriptions = []
+
+[twitch]
+follows = []

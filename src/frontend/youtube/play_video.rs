@@ -20,7 +20,7 @@ pub fn play_youtube_video(video: VideoTypes) {
         Playlist(PlayerList { url }) => url,
     };
     let player = load_config().unwrap();
-    let player = &(*player.video_player.as_str().unwrap());
+    let player = &(*player.options.video_player.as_str().unwrap());
     println!("▶ Now playing: {} :)", url);
     run_command(&format!("{} {}", player, url));
 }

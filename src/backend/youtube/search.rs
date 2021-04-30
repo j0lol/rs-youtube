@@ -72,8 +72,8 @@ impl Summary for YoutubeShelf {
     fn summarize(&self) -> String {
         let mut output = String::new();
 
-        for i in 0..self.content.len() {
-            let text = match &self.content[i] {
+        for i in &self.content {
+            let text = match i {
                 Results::Video(video) => video.summarize(),
                 Results::None => String::from("null"),
                 _ => {

@@ -16,7 +16,9 @@ exclude = ["old_functions.rs"]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0"
 directories = "3.0"
-toml = "0.5"
+toml = "0.5.6"
 serde_derive = "1.0"
 ureq = { version = "2.1.0", features = ["json"] }
 console = "0.14.1"
+webbrowser = "0.5.5"
+serde-query = "0.1.3"

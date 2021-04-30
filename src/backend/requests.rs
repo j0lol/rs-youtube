@@ -6,6 +6,9 @@ pub struct Request {
     pub(crate) header: Option<(String, String)>,
 }
 
+// TODO: Put body in a smart pointer to reduce copies
+// Box - When you have a large amount of data and you want to transfer ownership but ensure the data won’t be copied when you do so
+
 pub fn request(request: Request, agent: Option<&Agent>) -> Option<serde_json::Value> {
     match agent {
         None => match request.header {
