@@ -1,5 +1,5 @@
 [options]
-video_player = "mpv"
+video_player = "mpv -ao=alsa -v --ytdl-format='[height<420]'"
 
 [youtube]
 subscriptions = []
