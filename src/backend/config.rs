@@ -75,7 +75,7 @@ pub fn initial_config() -> String {
 
     let string = toml::to_string(&Config {
         youtube: YouTube { subscriptions: Array::new() },
-        options: Options {video_player: toml::Value::String("mpv".to_string())
+        options: Options {video_player: toml::Value::String("mpv -ao=alsa -v --ytdl-format='[height<420]'".to_string())
     },
         twitch: Twitch { follows: Array::new() },
     })
