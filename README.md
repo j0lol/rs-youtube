@@ -1,5 +1,7 @@
 # rs-youtube
 
+(Mirrored [to github](https://github.com/j0lol/rs-youtube) [from Codeberg](https://codeberg.org/j0/rs-youtube))
+
 Command line YouTube/Twitch client that uses the web api so no login or API key is needed.
 
 - Requires `mpv` and `youtube-dl`, or another video player capable of loading videos from YouTube/Twitch links (e.g. `celluloid`, even a web browser would work) 
@@ -22,7 +24,7 @@ cargo install rs-youtube
 
 3. Clone and run the project using `cargo`
 ```
-git clone https://github.com/j0lol/rs-youtube
+git clone https://codeberg.org/j0/rs-youtube
 cd rs-youtube
 cargo install --path .
 rs-youtube(.exe)
